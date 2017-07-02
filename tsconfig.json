@@ -8,16 +8,13 @@
     "noImplicitAny": true,
     "pretty": true,
     "removeComments": true,
-    "sourceMap": true,
-    "target": "ES5",
+    "target": "ES6",
     "lib": [
-      "dom",
-      "scripthost",
-      "es5",
       "es6",
       "es7"
     ],
     "rootDir": "./src",
+    "outDir": "./dist",
     "typeRoots": [
       "./node_modules/@types",
       "./src/typings/**"

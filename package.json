@@ -1,7 +1,7 @@
 {
   "name": "bindr-cli",
   "version": "0.0.1",
-  "description": "Convention-based Markdown documentation generator.",
+  "description": "CLI tool for Bindr.",
   "author": "cypherix93",
   "repository": {
     "type": "git",
@@ -40,13 +40,9 @@
   },
   "scripts": {
     "clean": "rimraf ./dist/",
-    "build": "npm run clean & npm run webpack",
-    "webpack": "cross-env NODE_ENV=production webpack",
-    "webpack:dev": "cross-env NODE_ENV=development webpack",
-    "webpack:watch": "cross-env NODE_ENV=development webpack --watch",
-    "server": "live-server --host=localhost --port=9087 --open=/test/",
-    "prepack": "npm run build",
-    "start": "./node_modules/.bin/concurrently \"npm run webpack:watch\" \"npm run server\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run clean & npm run compile",
+    "compile": "tsc",
+    "compile:watch": "tsc --watch",
+    "prepack": "npm run build"
   }
 }
