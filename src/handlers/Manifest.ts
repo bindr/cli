@@ -15,7 +15,9 @@ export async function handleManifest() {
         return;
     }
 
-    const files = await readdir(docsPath);
+    let files = await readdir(docsPath) as string[];
+    files = files
+        .map(f => path.relative(process.cwd(), f).replace(/\\/g, '/'));
 
     console.log(files);
 }
