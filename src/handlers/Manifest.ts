@@ -1,10 +1,11 @@
 const readdir = require('recursive-readdir');
-const appConfig = require('../../config.json') as IAppConfig;
 
-const bindrConfig = require(appConfig.configFile) as IBindrConfig;
+import {loadConfig} from '../config/Config';
 
 export async function handleManifest() {
-    const docsPath = bindrConfig.docs || './docs/';
+    const config = loadConfig();
+
+    const docsPath = config.docsPath || './docs/';
 
     const files = await readdir(docsPath);
 

@@ -1,0 +1,3 @@
+interface IAppArguments {
+    manifest: boolean;
+}

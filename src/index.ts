@@ -1,5 +1,5 @@
 import yargs = require('yargs');
-import main from './handlers';
+import main from './Main';
 
 // TODO: Configure yargs here
 
