@@ -62,6 +62,8 @@ function recurseOverDirectoryTree(treeEntries: ITreeEntry[]): ManifestEntry[] {
         manifestEntries.push(manifestEntry);
     }
 
+    manifestEntries.sort((left, right) => left.order - right.order);
+
     return manifestEntries;
 }
 
