@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import {CommandModule} from 'yargs';
 
 const directoryTree = require('directory-tree');
 
@@ -7,7 +8,13 @@ import {loadConfig} from '../config/Config';
 import {ManifestEntry, Section, Document} from '../models/Manifest';
 import {getFileRelativePath, getFileUrl} from '../helpers/PathHelper';
 
-export async function handleManifest() {
+export const Manifest: CommandModule = {
+    command: 'manifest',
+    describe: 'Parses the docs directory and generates the manifest to be used for navigation.',
+    handler: handleManifest
+};
+
+function handleManifest() {
     const config = loadConfig();
 
     const docsPath = path.resolve(config.docsPath || './docs/');
@@ -21,7 +28,10 @@ export async function handleManifest() {
 
     const manifest = createManifestFromTree(tree);
 
-    fs.writeFileSync('manifest.json', JSON.stringify(manifest));
+    const manifestPath = config.manifestOut || 'manifest.json';
+    fs.writeFileSync(manifestPath, JSON.stringify(manifest));
+
+    console.log(`Manifest written to '${manifestPath}'.`);
 }
 
 function createManifestFromTree(treeRoot: ITreeDirectory): ManifestEntry {

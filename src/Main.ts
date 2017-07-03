@@ -1,7 +1,10 @@
-import {handleManifest} from './handlers/Manifest';
+import * as yargs from 'yargs';
 
-export default async function main(argv: IAppArguments) {
-    if (argv.manifest) {
-        await handleManifest();
-    }
+import {Manifest} from './commands/Manifest';
+
+export default function main() {
+    yargs
+        .command(Manifest)
+        .help()
+        .argv;
 }
