@@ -1,7 +1,7 @@
 {
-  "name": "bindr-cli",
+  "name": "@bindr/cli",
   "version": "0.0.1",
-  "description": "CLI tool for Bindr.",
+  "description": "(WIP) CLI tool for Bindr.",
   "author": "cypherix93",
   "repository": {
     "type": "git",
