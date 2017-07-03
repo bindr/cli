@@ -11,6 +11,7 @@ export function getFileUrl(fullPath: string): string {
     const relativePath = getFileRelativePath(fullPath);
 
     const fileUrl = relativePath
+        .replace(/^docs\//, '')
         .replace(/\.md$/, '')
         .replace(/\/index/, '/');
 
