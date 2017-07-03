@@ -1,6 +1,6 @@
 {
   "name": "@bindr/cli",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "(WIP) CLI tool for Bindr.",
   "author": "cypherix93",
   "repository": {
@@ -21,6 +21,9 @@
   "main": "./dist/index.js",
   "bin": {
     "bindr": "./dist/index.js"
+  },
+  "engines": {
+    "node": ">=6.5.0"
   },
   "files": [
     "dist/"
