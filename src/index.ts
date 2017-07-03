@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import yargs = require('yargs');
 import main from './Main';
 
