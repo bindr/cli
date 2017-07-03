@@ -11,19 +11,30 @@ export async function handleManifest() {
 
     const docsPath = path.resolve(config.docsPath || './docs/');
 
-    if (!fs.existsSync(docsPath)) {
+    if (!fs.existsSync(docsPath) || !fs.statSync(docsPath).isDirectory()) {
         console.error(`ERROR: Docs folder not found at '${docsPath}'`);
         return;
     }
 
-    let tree = directoryTree(docsPath) as ITreeEntry[];
+    let tree = directoryTree(docsPath) as ITreeDirectory;
 
     const manifest = createManifestFromTree(tree);
 
     fs.writeFileSync('manifest.json', JSON.stringify(manifest));
 }
 
-function createManifestFromTree(treeEntries: ITreeEntry[]): ManifestEntry[] {
+function createManifestFromTree(treeRoot: ITreeDirectory): ManifestEntry {
+    const manifestRoot = new Section();
+    manifestRoot.title = 'root';
+
+    if (treeRoot.children && treeRoot.children.length) {
+        manifestRoot.children = recurseOverDirectoryTree(treeRoot.children);
+    }
+
+    return manifestRoot;
+}
+
+function recurseOverDirectoryTree(treeEntries: ITreeEntry[]): ManifestEntry[] {
     let manifestEntries: ManifestEntry[] = [];
 
     for (let entry of treeEntries) {
@@ -33,7 +44,7 @@ function createManifestFromTree(treeEntries: ITreeEntry[]): ManifestEntry[] {
             const dir = entry as ITreeDirectory;
 
             if (dir.children && dir.children.length) {
-                manifestEntry.children = createManifestFromTree(dir.children);
+                manifestEntry.children = recurseOverDirectoryTree(dir.children);
             }
         }
 
@@ -44,6 +55,7 @@ function createManifestFromTree(treeEntries: ITreeEntry[]): ManifestEntry[] {
 }
 
 function processDirectoryTreeEntry(treeEntry: ITreeEntry): ManifestEntry {
+
     if (treeEntry.type === 'directory') {
         const section = new Section();
         section.title = treeEntry.name;
