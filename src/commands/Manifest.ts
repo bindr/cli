@@ -7,6 +7,7 @@ const directoryTree = require('directory-tree');
 import {loadConfig} from '../config/Config';
 import {ManifestEntry, Section, Document} from '../models/Manifest';
 import {getFileRelativePath, getFileUrl} from '../helpers/PathHelper';
+import {getEntryTitle} from '../helpers/TitleHelper';
 
 export const Manifest: CommandModule = {
     command: 'manifest',
@@ -69,12 +70,12 @@ function processDirectoryTreeEntry(treeEntry: ITreeEntry): ManifestEntry {
 
     if (treeEntry.type === 'directory') {
         const section = new Section();
-        section.title = treeEntry.name;
+        section.title = getEntryTitle(treeEntry.name);
         return section;
     }
     else if (treeEntry.type === 'file') {
         const document = new Document();
-        document.title = treeEntry.name;
+        document.title = getEntryTitle(treeEntry.name);
         document.url = getFileUrl(treeEntry.path);
         document.filePath = getFileRelativePath(treeEntry.path);
         return document;
