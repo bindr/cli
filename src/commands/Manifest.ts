@@ -35,36 +35,29 @@ function handleManifest() {
 }
 
 function createManifestFromTree(treeRoot: ITreeDirectory): ManifestEntry {
-    const manifestRoot = new Section();
-    manifestRoot.title = 'root';
-
-    if (treeRoot.children && treeRoot.children.length) {
-        manifestRoot.children = recurseOverDirectoryTree(treeRoot.children);
-    }
-
-    return manifestRoot;
+    return recurseOverTreeEntry(treeRoot);
 }
 
-function recurseOverDirectoryTree(treeEntries: ITreeEntry[]): ManifestEntry[] {
-    let manifestEntries: ManifestEntry[] = [];
+function recurseOverTreeEntry(treeEntry: ITreeEntry): ManifestEntry {
+    const manifestEntry = processDirectoryTreeEntry(treeEntry);
 
-    for (let entry of treeEntries) {
-        const manifestEntry = processDirectoryTreeEntry(entry);
+    if (treeEntry.type === 'directory') {
+        const dir = treeEntry as ITreeDirectory;
 
-        if (entry.type === 'directory') {
-            const dir = entry as ITreeDirectory;
+        if (dir.children && dir.children.length) {
+            manifestEntry.children = [];
 
-            if (dir.children && dir.children.length) {
-                manifestEntry.children = recurseOverDirectoryTree(dir.children);
+            for (let child of dir.children) {
+                const manifestEntryChild = recurseOverTreeEntry(child);
+                manifestEntry.children.push(manifestEntryChild);
             }
-        }
 
-        manifestEntries.push(manifestEntry);
+            manifestEntry.children
+                .sort((left, right) => left.order - right.order);
+        }
     }
 
-    manifestEntries.sort((left, right) => left.order - right.order);
-
-    return manifestEntries;
+    return manifestEntry;
 }
 
 function processDirectoryTreeEntry(treeEntry: ITreeEntry): ManifestEntry {
