@@ -53,7 +53,7 @@ function recurseOverTreeEntry(treeEntry: ITreeEntry): ManifestEntry | null {
             for (let child of dir.children) {
                 const manifestEntryChild = recurseOverTreeEntry(child);
 
-                if (!manifestEntryChild)
+                if (manifestEntryChild)
                     manifestEntry.children.push(manifestEntryChild);
             }
 

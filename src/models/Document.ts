@@ -1,5 +1,6 @@
 import {ManifestEntry, ManifestEntryType} from './ManifestEntry';
-import {getFileRelativePath, getFileUrl, processEntryTitle} from '../helpers/ManifestEntryHelper';
+import {parseTitle} from '../helpers/TitleParser';
+import {getFileRelativePath, getFileUrl} from '../helpers/PathsParser';
 
 export class Document extends ManifestEntry {
     url: string;
@@ -15,7 +16,7 @@ export class Document extends ManifestEntry {
 }
 
 function convertTreeEntryToSection(self: Document, treeEntry: ITreeEntry) {
-    const orderTitleTuple = processEntryTitle(treeEntry.name);
+    const orderTitleTuple = parseTitle(treeEntry.name);
 
     self.title = orderTitleTuple.title;
     self.order = orderTitleTuple.order;

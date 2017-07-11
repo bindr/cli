@@ -1,5 +1,5 @@
 import {ManifestEntry, ManifestEntryType} from './ManifestEntry';
-import {processEntryTitle} from '../helpers/ManifestEntryHelper';
+import {parseTitle} from '../helpers/TitleParser';
 
 export class Section extends ManifestEntry {
     constructor(treeEntry: ITreeEntry) {
@@ -13,7 +13,7 @@ export class Section extends ManifestEntry {
 }
 
 function convertTreeEntryToSection(self: Section, treeEntry: ITreeEntry) {
-    const orderTitleTuple = processEntryTitle(treeEntry.name);
+    const orderTitleTuple = parseTitle(treeEntry.name);
 
     self.title = orderTitleTuple.title;
     self.order = orderTitleTuple.order;
