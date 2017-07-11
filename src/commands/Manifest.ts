@@ -6,8 +6,7 @@ const directoryTree = require('directory-tree');
 
 import {loadConfig} from '../config/Config';
 import {ManifestEntry} from '../models/ManifestEntry';
-import {Section} from '../models/Section';
-import {Document} from '../models/Document';
+import {processDirectoryTreeEntry} from '../helpers/ManifestEntryHelper';
 
 export const Manifest: CommandModule = {
     command: 'manifest',
@@ -39,8 +38,11 @@ function createManifestFromTree(treeRoot: ITreeDirectory): ManifestEntry {
     return recurseOverTreeEntry(treeRoot);
 }
 
-function recurseOverTreeEntry(treeEntry: ITreeEntry): ManifestEntry {
+function recurseOverTreeEntry(treeEntry: ITreeEntry): ManifestEntry | null {
     const manifestEntry = processDirectoryTreeEntry(treeEntry);
+
+    if (!manifestEntry)
+        return null;
 
     if (treeEntry.type === 'directory') {
         const dir = treeEntry as ITreeDirectory;
@@ -50,7 +52,9 @@ function recurseOverTreeEntry(treeEntry: ITreeEntry): ManifestEntry {
 
             for (let child of dir.children) {
                 const manifestEntryChild = recurseOverTreeEntry(child);
-                manifestEntry.children.push(manifestEntryChild);
+
+                if (!manifestEntryChild)
+                    manifestEntry.children.push(manifestEntryChild);
             }
 
             manifestEntry.children
@@ -59,14 +63,4 @@ function recurseOverTreeEntry(treeEntry: ITreeEntry): ManifestEntry {
     }
 
     return manifestEntry;
-}
-
-function processDirectoryTreeEntry(treeEntry: ITreeEntry): ManifestEntry {
-    if (treeEntry.type === 'directory') {
-        return new Section(treeEntry);
-    }
-    else if (treeEntry.type === 'file') {
-        return new Document(treeEntry);
-    }
-    return null;
 }
