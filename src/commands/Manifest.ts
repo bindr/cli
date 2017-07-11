@@ -5,8 +5,9 @@ import {CommandModule} from 'yargs';
 const directoryTree = require('directory-tree');
 
 import {loadConfig} from '../config/Config';
-import {ManifestEntry, Section, Document} from '../models/Manifest';
-import {getFileRelativePath, getFileUrl} from '../helpers/PathHelper';
+import {ManifestEntry} from '../models/ManifestEntry';
+import {Section} from '../models/Section';
+import {Document} from '../models/Document';
 
 export const Manifest: CommandModule = {
     command: 'manifest',
@@ -61,40 +62,11 @@ function recurseOverTreeEntry(treeEntry: ITreeEntry): ManifestEntry {
 }
 
 function processDirectoryTreeEntry(treeEntry: ITreeEntry): ManifestEntry {
-
-    const orderTitleTuple = processEntryTitle(treeEntry.name);
-
     if (treeEntry.type === 'directory') {
-        const section = new Section();
-        section.title = orderTitleTuple.title;
-        section.order = orderTitleTuple.order;
-        return section;
+        return new Section(treeEntry);
     }
     else if (treeEntry.type === 'file') {
-        const document = new Document();
-        document.title = orderTitleTuple.title;
-        document.order = orderTitleTuple.order;
-        document.url = getFileUrl(treeEntry.path);
-        document.filePath = getFileRelativePath(treeEntry.path);
-        return document;
+        return new Document(treeEntry);
     }
-
     return null;
-}
-
-function processEntryTitle(rawName: string): { order: number, title: string } {
-    let tokens = rawName
-        .replace(/\.md$/, '')
-        .split('_');
-
-    const orderPart = tokens[0];
-    const order = parseInt(orderPart);
-
-    if (!orderPart || !isNaN(order)) {
-        tokens.splice(0, 1);
-    }
-
-    const title = tokens.join(' ');
-
-    return {order, title};
 }
